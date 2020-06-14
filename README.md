@@ -119,7 +119,7 @@ Now, to modify some value and add some setting attribute, first, make a copy for
 ```
 
 ##### ONT Account:
-*Add new attribute `<X_HW_CLISSHControl Enable="1" port="22" Mode="0" AluSSHAbility="0"/>` before `<X_HW_CLITelnetAccess/>` *
+*Add new attribute `<X_HW_CLISSHControl Enable="1" port="22" Mode="0" AluSSHAbility="0"/>` before `<X_HW_CLITelnetAccess/>`*
 ```xml
 <UserInterface>
 <X_HW_CLIUserInfo NumberOfInstances="1">
