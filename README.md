@@ -177,7 +177,7 @@ Yes! `ssh`, `telnet` is open, but `ftp` is closed, not sure why...
 
 #### Time to login
 try to login with `root` username and `adminHW` password:
-[img]
+![ssh yes](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/Screenshot_2020-06-14_16-11-49.png)
 
 Yes it worked!
 This not like full edge Linux, like cisco, ubiquiti, mikrotik, Huawei also have their own config command.
