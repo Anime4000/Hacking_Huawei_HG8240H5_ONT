@@ -1,0 +1,17 @@
+telnet:
+<AclServices HTTPLanEnable="1" HTTPWanEnable="0" FTPLanEnable="0" FTPWanEnable="0" TELNETLanEnable="1" TELNETWanEnable="0" SSHLanEnable="0" SSHWanEnable="0" HTTPPORT="800" FTPPORT="21" TELNETPORT="230" SSHPORT="22" HTTPWifiEnable="1" TELNETWifiEnable="1"/>
+<X_HW_CLITelnetAccess Access="1" TelnetPort="230"/>
+
+HTTP:
+<AclServices HTTPLanEnable="1" HTTPWanEnable="0" FTPLanEnable="0" FTPWanEnable="0" TELNETLanEnable="1" TELNETWanEnable="0" SSHLanEnable="0" SSHWanEnable="0" HTTPPORT="800" FTPPORT="21" TELNETPORT="230" SSHPORT="22" HTTPWifiEnable="1" TELNETWifiEnable="1"/>
+<X_HW_WebServerConfig ListenMode="0" ListenInnerPort="800" ListenOuterPort="80"/>
+
+
+ssh:
+<AclServices HTTPLanEnable="1" HTTPWanEnable="0" FTPLanEnable="0" FTPWanEnable="0" TELNETLanEnable="1" TELNETWanEnable="0" SSHLanEnable="0" SSHWanEnable="0" HTTPPORT="800" FTPPORT="21" TELNETPORT="230" SSHPORT="220" HTTPWifiEnable="1" TELNETWifiEnable="1"/>
+<X_HW_CLISSHControl Enable="1" port="220" Mode="0" AluSSHAbility="0"/>
+
+
+FTP:
+<AclServices HTTPLanEnable="1" HTTPWanEnable="0" FTPLanEnable="1" FTPWanEnable="0" TELNETLanEnable="1" TELNETWanEnable="0" SSHLanEnable="1" SSHWanEnable="0" HTTPPORT="80" FTPPORT="21" TELNETPORT="23" SSHPORT="22" HTTPWifiEnable="1" TELNETWifiEnable="1" WebPermanentCloseControl="0" SamBaLanEnable="1" SamBaWanEnable="0" WebAccessControl="1" TrustHost=""/>
+<X_HW_ServiceManage FtpEnable="0" FtpPort="21" FtpRoorDir="/mnt/usb1_1/" FtpUserNum="0"/>

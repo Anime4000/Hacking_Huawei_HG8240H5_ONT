@@ -1,0 +1,8 @@
+ <X_HW_CLITelnetAccess Access="1" TelnetPort="23"/>
+ <X_HW_CLIUserInfo NumberOfInstances="1">
+ <X_HW_CLIUserInfoInstance InstanceID="1" Username="root" Userpassword="oK!<iVJ[uzy@4n'c="JDi+A}C7-X+-/@|D\T-'o9FBSQNo4XU<GMW6>RXfwVN&$" UserGroup="" ModifyPWDFlag="0" EncryptMode="2" Salt="7764c3e15ad4b3f8d3783025"/>
+ </X_HW_CLIUserInfo>
+ <X_HW_WebUserInfo NumberOfInstances="2">
+ <X_HW_WebUserInfoInstance InstanceID="1" UserName="useradmin" Password="" UserLevel="1" Enable="1" ModifyPasswordFlag="0" PassMode="2" Alias="cpe-1"/> <X_HW_WebUserInfoInstance InstanceID="2" UserName="telecomadmin" Password="_U=s%hjUJ/|)|;9Z^VTDfCoP1UH9z;aG3''CPk4NM1d)Xy\Z':rdg(;]FtT5M*O%tn11W'=4</$" UserLevel="0" Enable="1" ModifyPasswordFlag="0" PassMode="3" Alias="cpe-2" Salt="c358d9e20afbab3bc6b0f32d"/>
+ </X_HW_WebUserInfo>
+ <X_HW_WebSslInfo Enable="0" CertPassword=""/>
