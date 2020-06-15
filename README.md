@@ -126,9 +126,9 @@ Now, to modify some value and add some setting attribute, first, make a copy for
 ```
 
 #### ONT FTP
-*Edit `FtpEnable="1"` and `FtpRoorDir="/mnt/usb1_1/../../"`*
+*Edit `FtpEnable="1"` and `FtpRoorDir="/mnt/jffs2/"`*
 ```xml
-<X_HW_ServiceManage FtpEnable="1" FtpPort="21" FtpRoorDir="/mnt/usb1_1/../../" FtpUserNum="0"/>
+<X_HW_ServiceManage FtpEnable="1" FtpPort="21" FtpRoorDir="/mnt/jffs2/" FtpUserNum="0"/>
 ```
 
 #### ONT Remote Management
@@ -152,6 +152,7 @@ Save modified file and upload crafted XML, ONT will reboot for take effect of th
 ### Checking...
 After ONT up and running, change to new static IP Address to `192.168.100.0/24`:
 ![enter image description here](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/static%20ip%20100.png)
+
 Time to scan port see any open:
 ![enter image description here](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/nmap_2_scan.png)
 Yes! `ssh`, `telnet` is open, but `ftp` is closed, not sure why...
