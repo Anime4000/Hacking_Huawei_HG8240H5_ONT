@@ -6,6 +6,14 @@ This repo was inspired by [@logon84](https://github.com/logon84/Hacking_Huawei_H
 ## Step & Guide to access CLI
 After I moving from ADSL2+ (8192/512k) internet to Fiber Internet (300/50m), I found my connection latency are horrible, in my country,  ISP **hard limit** WAN speed for unfair competitive, this guide ***try*** to remove **hard limit**, thus will solve **bufferbloat** issue that cause `ping` spike.
 
+The ONT will receive some command from OLT for **hard limit** *I woner what is command OLT send to this ONT*
+```
+1981-01-01 00:01:43 [Critical][Config-Log] Terminal:OLT(-),Result:Success,Type:Set,Msg:Me[11] Inst[257] Att[5] Val[0]
+1981-01-01 00:01:43 [Critical][Config-Log] Terminal:OLT(-),Result:Success,Type:Set,Msg:Me[11] Inst[258] Att[5] Val[0]
+1981-01-01 00:01:43 [Critical][Config-Log] Terminal:OLT(-),Result:Success,Type:Set,Msg:Me[11] Inst[259] Att[5] Val[0]
+1981-01-01 00:01:43 [Critical][Config-Log] Terminal:OLT(-),Result:Success,Type:Set,Msg:Me[11] Inst[260] Att[5] Val[0]
+```
+
 ![ONT Top](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/ont_front_mozjpeg.jpg)
 So I got another extra ONT from a friend, in this particular modem I have is **HG8240H5** for me experiment with, without risking main ONT.
 
