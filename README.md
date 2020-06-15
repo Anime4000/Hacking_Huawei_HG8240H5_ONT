@@ -6,12 +6,12 @@ This repo was inspired by [@logon84](https://github.com/logon84/Hacking_Huawei_H
 ## Step & Guide to access CLI
 After I moving from ADSL2+ (8192/512k) internet to Fiber Internet (300/50m), I found my connection latency are horrible, in my country,  ISP **hard limit** WAN speed for unfair competitive, this guide ***try*** to remove **hard limit**, thus will solve **bufferbloat** issue that cause `ping` spike.
 
-![enter image description here](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/IMG_20200615_181514-fc8QLXfs.jpg)
+![enter image description here](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/ont_front_mozjpeg)
 So I got another extra ONT from a friend, in this particular modem I have is **HG8240H5** for me experiment with, without risking main ONT.
 
 ## Issue #1
 Back of ONT have some info about default IP address and login info for access Web GUI,
-![enter image description here](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/IMG_20200615_185546-c3tQLXfs.jpg)
+![enter image description here](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/ont_back_mozjpeg.jpg)
 My Kali PC have 3 LAN port, `eth0` used for Internet.
 
 However, this particular ONT using `192.168.1.1` will conflict with my `eth0`, so I need to disconnect my `eth0` temporary, connect ONT to `eth2` and set network profile:
