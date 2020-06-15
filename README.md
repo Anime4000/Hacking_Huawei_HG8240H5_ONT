@@ -6,7 +6,7 @@ This repo was inspired by [@logon84](https://github.com/logon84/Hacking_Huawei_H
 ## Step & Guide to access CLI
 After I moving from ADSL2+ (8192/512k) internet to Fiber Internet (300/50m), I found my connection latency are horrible, in my country,  ISP **hard limit** WAN speed for unfair competitive, this guide ***try*** to remove **hard limit**, thus will solve **bufferbloat** issue that cause `ping` spike.
 
-![enter image description here](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/ont_front_mozjpeg)
+![enter image description here](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/ont_front_mozjpeg.jpg)
 So I got another extra ONT from a friend, in this particular modem I have is **HG8240H5** for me experiment with, without risking main ONT.
 
 ## Issue #1
