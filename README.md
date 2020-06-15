@@ -128,7 +128,7 @@ Now, to modify some value and add some setting attribute, first, make a copy for
 #### ONT FTP
 *Edit `FtpEnable="1"` and `FtpRoorDir="/mnt/jffs2/"`*
 ```xml
-<X_HW_ServiceManage FtpEnable="1" FtpPort="21" FtpRoorDir="/mnt/jffs2/" FtpUserNum="0"/>
+<X_HW_ServiceManage FtpEnable="1" FtpUserName="root" FtpPassword="admin" FtpPort="21" FtpRoorDir="/mnt/jffs2/" FtpUserNum="0"/>
 ```
 
 #### ONT Remote Management
