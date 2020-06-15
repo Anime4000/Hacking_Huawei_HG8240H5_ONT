@@ -1,6 +1,7 @@
 
 # Hacking Huawei HG8240 Series ONT/ONU
 Huawei HG8240 Series ONT was a mass produce for country deploy Fiber Internet.
+This repo was inspired by [@logon84](https://github.com/logon84/Hacking_Huawei_HG8012H_ONT)
 
 ## Step & Guide to access CLI
 After I moving from ADSL2+ (8192/512k) internet to Fiber Internet (300/50m), I found my connection latency are horrible, in my country,  ISP **hard limit** WAN speed for unfair competitive, this guide ***try*** to remove **hard limit**, thus will solve **bufferbloat** issue that cause `ping` spike.
