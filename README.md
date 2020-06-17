@@ -3,7 +3,7 @@
 Huawei HG8240 Series ONT was a mass produce for country deploy Fiber Internet.
 This repo was inspired by [@logon84](https://github.com/logon84/Hacking_Huawei_HG8012H_ONT)
 
-## Step & Guide to access CLI
+# Step & Guide to access CLI
 After I moving from ADSL2+ (8192/512k) internet to Fiber Internet (300/50m), I found my connection latency are horrible, in my country,  ISP **hard limit** WAN speed for unfair competitive, this guide ***try*** to remove **hard limit**, thus will solve **bufferbloat** issue that cause `ping` spike.
 
 The ONT will receive some command from OLT for **hard limit** *I woner what is command OLT send to this ONT*
@@ -17,23 +17,24 @@ The ONT will receive some command from OLT for **hard limit** *I woner what is c
 ![ONT Top](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/ont_front_mozjpeg.jpg)
 So I got another extra ONT from a friend, in this particular modem I have is **HG8240H5** for me experiment with, without risking main ONT.
 
-## Issue #1
+# Issue #1
 Back of ONT have some info about default IP address and login info for access Web GUI,
 ![ONT Bottom](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/ont_back_mozjpeg.jpg)
+
 My Kali PC have 3 LAN port, `eth0` used for Internet.
 
 However, this particular ONT using `192.168.1.1` will conflict with my `eth0`, so I need to disconnect my `eth0` temporary, connect ONT to `eth2` and set network profile:
 ![ONT Bottom](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/static%20ip.png)
 
-## Issue #2
+# Issue #2
 Inside Web GUI, configuration pretty basic. I want to access advanced configuration! It should be some configuration port, or Telnet/SSH!
 
-### Scan Port
+## Scan Port
 I trying to find any available open port using `nmap` tools, what I found:
 ![enter image description here](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/nmap_1_scan.png)
 Port `21` `22` `23` was filtered by device firewall. there is no way to gain access these port, time to move next part!
 
-### WebGUI
+## WebGUI
 Login to Web GUI via `https:\\192.168.1.1:80` *yes, HTTPS works with port 80, pretty weird...*
 ![enter image description here](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/WebGUI_001.png)
 For this model, I use `tmadmin` for username, `Adm@XXXX` for password, where `XXXX` is last HEX digit of **mac address**
@@ -42,7 +43,7 @@ You can try several default login, just google it!
 
 If you received **First Time Setup** or **Service Provisioning**, simply `Exit` or `Skip`
 
-### Download configuration
+## Download configuration
 Hopefully by downloading configuration, I can craft and edit to enable extra feature, allowing me to access SSH for advanced configuration.
 ![---](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/WebGUI_003.png)
 This model, no need to use `aescrypt2_huawei` to decrypt configuration file:
@@ -51,7 +52,7 @@ This model, no need to use `aescrypt2_huawei` to decrypt configuration file:
 ---
 Hours of hours examine and found something interesting:
 
-#### ONT IP Address:
+### ONT IP Address:
 ```xml
 <IPInterface NumberOfInstances="2">
 <IPInterfaceInstance InstanceID="1" Enable="1" IPInterfaceIPAddress="192.168.1.1" IPInterfaceSubnetMask="255.255.255.0" IPInterfaceAddressingType="Static" X_HW_AddressConflictDetectionEnable="1" X_HW_RouteProtocolRx="Off" X_HW_RouteProtocolRxMode="Passive" X_HW_RouteProtocolAuthMode="Off" X_HW_RouteProtocolAuthKey=""/>
@@ -59,14 +60,14 @@ Hours of hours examine and found something interesting:
 </IPInterface>
 ```
 
-#### ONT Services:
+### ONT Services:
 ```xml
 <AclServices HTTPLanEnable="1" HTTPWanEnable="0" FTPLanEnable="0" FTPWanEnable="0" TELNETLanEnable="0" TELNETWanEnable="0" SSHLanEnable="0" SSHWanEnable="0" HTTPPORT="80" FTPPORT="21" TELNETPORT="23" SSHPORT="22" HTTPWifiEnable="1" TELNETWifiEnable="1">
 <AccessControl AccessControlListEnable="0" AccessControlListNumberOfEntries="0"/>
 </AclServices>
 ```
 
-#### ONT Account:
+### ONT Account:
 ```xml
 <UserInterface>
 <X_HW_CLIUserInfo NumberOfInstances="1">
@@ -80,27 +81,32 @@ Hours of hours examine and found something interesting:
 </UserInterface>
 ```
 
-#### ONT FTP
+### ONT FTP
 ```xml
 <X_HW_ServiceManage FtpEnable="0" FtpPort="21" FtpRoorDir="/mnt/usb1_1/" FtpUserNum="0"/>
 ```
 
-#### ONT Remote Management
+### ONT Remote Management
 ```xml
 <ManagementServer EnableCWMP="1" URL="http://acs.tm.com.my:8082/tmacstr069" Username="cpe" Password="$2u5-SPs=_w7V^&gt;a*6l&gt;aPZft|==e/s*d&lt;j,WEZr4V$" PeriodicInformEnable="1" PeriodicInformInterval="43200" PeriodicInformTime="" ParameterKey="0" ConnectionRequestURL="" ConnectionRequestUsername="ccs" ConnectionRequestPassword="$2#.+hWU=%ORPHK~6|E4B1~_*:&lt;9s)L2JLUN.DqVcP$" UpgradesManaged="0" KickURL="" DownloadProgressURL="" DefaultActiveNotificationThrottle="0" UDPConnectionRequestAddress="" UDPConnectionRequestAddressNotificationLimit="0" STUNEnable="0" STUNServerAddress="" STUNServerPort="0" STUNUsername="" STUNPassword="" STUNMaximumKeepAlivePeriod="0" STUNMinimumKeepAlivePeriod="0" NATDetected="0" ManageableDeviceNumberOfEntries="0" ManageableDeviceNotificationLimit="0" X_HW_EnableCertificate="0" X_HW_CertPassword="$2}=\7,O;T~V7/J+!N~t@7_R|!IW]|ZB,&apos;JS*Pus`H$" X_HW_DSCP="0" X_HW_CheckPasswordComplex="0" X_HW_PeriodicInformTime=""/>
 ```
 
-#### ONT Power Management
+### ONT Power Management
 ```xml
 <X_HW_APMPolicy EnablePowerSavingMode="1">
 <BatteryModePolicy NotUseUsbService="0" NotUseLanService="0" NotUseWlanService="0" NotUseVoiceService="0" NotUseCATVService="0" NotUseRemoteManagement="0"/>
 </X_HW_APMPolicy>
 ```
 
-### Time to modify
+### ONT Custom Info
+```xml
+<X_HW_ProductInfo originalVersion="V500R019C00SPC125A1904230116" currentVersion="V500R019" customInfo="TM" customInfoDetail="tm"/>
+```
+
+## Time to modify
 Now, to modify some value and add some setting attribute, first, make a copy for modified version! Then copy these XML and replace.
 
-#### ONT IP Address:
+### ONT IP Address:
 *Change `192.168.1.1` to `192.168.100.1` also `disable` 2nd IP Address, it's useless*:
 ```xml
 <IPInterface NumberOfInstances="2">
@@ -109,7 +115,7 @@ Now, to modify some value and add some setting attribute, first, make a copy for
 </IPInterface>
 ```
 
-#### ONT Services:
+### ONT Services:
 *Change `0` to `1` for attribute: `FTPLanEnable="1"` `TELNETLanEnable="1"` `SSHLanEnable="1"`*
 ```xml
 <AclServices HTTPLanEnable="1" HTTPWanEnable="0" FTPLanEnable="1" FTPWanEnable="0" TELNETLanEnable="1" TELNETWanEnable="0" SSHLanEnable="1" SSHWanEnable="0" HTTPPORT="80" FTPPORT="21" TELNETPORT="23" SSHPORT="22" HTTPWifiEnable="1" TELNETWifiEnable="1">
@@ -117,7 +123,7 @@ Now, to modify some value and add some setting attribute, first, make a copy for
 </AclServices>
 ```
 
-#### ONT Account:
+### ONT Account:
 *Add new attribute `<X_HW_CLISSHControl Enable="1" port="22" Mode="0" AluSSHAbility="0"/>` before `<X_HW_CLITelnetAccess/>`*
 ```xml
 <UserInterface>
@@ -133,19 +139,19 @@ Now, to modify some value and add some setting attribute, first, make a copy for
 </UserInterface>
 ```
 
-#### ONT FTP
+### ONT FTP
 *Edit `FtpEnable="1"` and `FtpRoorDir="/mnt/jffs2/"`*
 ```xml
 <X_HW_ServiceManage FtpEnable="1" FtpUserName="root" FtpPassword="admin" FtpPort="21" FtpRoorDir="/mnt/jffs2/" FtpUserNum="0"/>
 ```
 
-#### ONT Remote Management
+### ONT Remote Management
 *Disable Remote Management `EnableCWMP="0"`*
 ```xml
 <ManagementServer EnableCWMP="0" URL="http://acs.tm.com.my:8082/tmacstr069" Username="cpe" Password="$2u5-SPs=_w7V^&gt;a*6l&gt;aPZft|==e/s*d&lt;j,WEZr4V$" PeriodicInformEnable="1" PeriodicInformInterval="43200" PeriodicInformTime="" ParameterKey="0" ConnectionRequestURL="" ConnectionRequestUsername="ccs" ConnectionRequestPassword="$2#.+hWU=%ORPHK~6|E4B1~_*:&lt;9s)L2JLUN.DqVcP$" UpgradesManaged="0" KickURL="" DownloadProgressURL="" DefaultActiveNotificationThrottle="0" UDPConnectionRequestAddress="" UDPConnectionRequestAddressNotificationLimit="0" STUNEnable="0" STUNServerAddress="" STUNServerPort="0" STUNUsername="" STUNPassword="" STUNMaximumKeepAlivePeriod="0" STUNMinimumKeepAlivePeriod="0" NATDetected="0" ManageableDeviceNumberOfEntries="0" ManageableDeviceNotificationLimit="0" X_HW_EnableCertificate="0" X_HW_CertPassword="$2}=\7,O;T~V7/J+!N~t@7_R|!IW]|ZB,&apos;JS*Pus`H$" X_HW_DSCP="0" X_HW_CheckPasswordComplex="0" X_HW_PeriodicInformTime=""/>
 ```
 
-#### ONT Power Management
+### ONT Power Management
 *Disable Power Management `EnablePowerSavingMode="0"` for maximum performance!*
 ```xml
 <X_HW_APMPolicy EnablePowerSavingMode="0">
@@ -153,11 +159,17 @@ Now, to modify some value and add some setting attribute, first, make a copy for
 </X_HW_APMPolicy>
 ```
 
-### Upload a Modification
+### ONT Custom Info
+*Change `isp` info to `common` device*
+```xml
+<X_HW_ProductInfo originalVersion="V500R019C00SPC125A1904230116" currentVersion="V500R019" customInfo="COMMON" customInfoDetail="common"/>
+```
+
+## Upload a Modification
 Save modified file and upload crafted XML, ONT will reboot for take effect of this change.
 ![enter image description here](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/WebGUI_005.png)
 
-### Checking...
+## Checking...
 After ONT up and running, change to new static IP Address to `192.168.100.0/24`:
 ![enter image description here](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/static%20ip%20100.png)
 
@@ -165,7 +177,7 @@ Time to scan port see any open:
 ![enter image description here](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/nmap_2_scan.png)
 Yes! `ssh`, `telnet` is open, but `ftp` is closed, not sure why...
 
-### Time to login
+## Time to login
 try to login with `root` username and `adminHW` password:
 ![ssh yes](https://raw.githubusercontent.com/Anime4000/Hacking_Huawei_HG8240H5_ONT/master/images/Screenshot_2020-06-14_16-11-49.png)
 Yes it worked!
@@ -608,7 +620,7 @@ wap ps
 wap top
 ```
 
-### Issue #3
+## Issue #3
 I don't see any command about specific GEM where I can remove *hard speed limit*
 
 I thinking, let's try open this and find UART header, see if I can access more command via UART
@@ -841,7 +853,7 @@ Creating 2 MTD partitions on "hinand":
 Have 2 partition `bootcode` and `ubilayer_v5`.
 About `ubilayer_v5` seem like logical partition, trying to hide `jffs` root partition
 
-### Issue #5
+## Issue #5
 I thinking to extract flash memory, ONT I have using `MXIC MX35LF1GE4AB` 1Gb (128MiB) in size.
 This flash memory have 8 pin:
 ```
@@ -856,9 +868,9 @@ This flash memory have 8 pin:
 ```
 At this moment, I dont have `PICkit 3` to read these
 
-## Help
+# Help
 I want help from a community let's figure out to how to crack this ONT and remove any speed limit.
 
-## To Do
+# To Do
 1. Have `PICkit 3`
 2. FS Decryption
