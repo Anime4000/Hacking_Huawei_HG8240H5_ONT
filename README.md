@@ -866,11 +866,90 @@ This flash memory have 8 pin:
 7- HOLD#/SIO3
 8- VCC
 ```
-At this moment, I dont have `PICkit 3` to read these
 
-# Help
-I want help from a community let's figure out to how to crack this ONT and remove any speed limit.
+# Reading MX35LF1GE4AB
+I have used well-known and cheat `CH341` programmer with a software called `SNANDer` (https://github.com/droid-MAX/SNANDer)
+The pinout above is absolutely fine. There are two dumps attached - one with `-I` flag, and one with `-d` flag.
+To be sure that I won't mess the CPU, I've unsoldered the NAND with hot air station. Here are some pics:
+images/NAND_desoldered.jpg
+images/Programmer.png
+
+Now comes the interesting part - see what's inside the dump.
+
+# LET'S PLAY - disassembling the dump
+Huawei developers did their job at protecting the firmware inside very well. The first thing that I've tried was trying to mount `ubilayer_v5` inside my Linux box. Up to this moment - without success. Binwalk showed some signs of UBI partitions, but that was not enough.
+Next thing to try was to use `dd` and crop the UBI part only. 
+Then, using `ubireader`, I've managed to extract some of the partitions:
+```
+-rw-r--r-- 1 root root 38219776 Nov 33 16:59 img-1805343795_vol-allsystemA.ubifs
+-rw-r--r-- 1 root root 38219776 Nov 33 16:59 img-1805343795_vol-allsystemB.ubifs
+-rw-r--r-- 1 root root   126976 Nov 33 16:59 img-1805343795_vol-flash_configA.ubifs
+-rw-r--r-- 1 root root   126976 Nov 33 16:59 img-1805343795_vol-flash_configB.ubifs
+-rw-r--r-- 1 root root   126976 Nov 33 16:59 img-1805343795_vol-slave_paramA.ubifs
+-rw-r--r-- 1 root root   126976 Nov 33 16:59 img-1805343795_vol-slave_paramB.ubifs
+```
+At this point, only about 77 megabytes of data have been extracted.
+After that, with the help of this guide (https://www.riverloopsecurity.com/blog/2021/07/nand-dump-repair/), using their script over `Huawei_ONT_Dump_d_flag_on` and again extracting the image, about 108 MB out of 134 MB data came out.
+
+```
+-rw-r--r-- 1 root root 38219776 Dec  34 19:42 img-1805343795_vol-allsystemA.ubifs
+-rw-r--r-- 1 root root 38219776 Dec  34 19:42 img-1805343795_vol-allsystemB.ubifs
+-rw-r--r-- 1 root root 30982144 Dec  34 19:42 img-1805343795_vol-file_system.ubifs
+-rw-r--r-- 1 root root   126976 Dec  34 19:42 img-1805343795_vol-flash_configA.ubifs
+-rw-r--r-- 1 root root   126976 Dec  34 19:42 img-1805343795_vol-flash_configB.ubifs
+-rw-r--r-- 1 root root   126976 Dec  34 19:42 img-1805343795_vol-keyfile.ubifs
+-rw-r--r-- 1 root root   126976 Dec  34 19:42 img-1805343795_vol-slave_paramA.ubifs
+-rw-r--r-- 1 root root   126976 Dec  34 19:42 img-1805343795_vol-slave_paramB.ubifs
+-rw-r--r-- 1 root root   126976 Dec  34 19:42 img-1805343795_vol-wifi_paramA.ubifs
+-rw-r--r-- 1 root root   126976 Dec  34 19:42 img-1805343795_vol-wifi_paramB.ubifs
+
+```
+Seems like UBI fs is doing his job to protect the NAND memory and is moving some of the data pver different regions.
+
+Interesting part of these partitions is `allsystemA.ubifs` and `allsystemB.ubifs`. It seems like they contain the main FS.
+According to binwalk, there is some sort of LZMA compressed data inside:
+```
+root@linux:~/# binwalk allsystemA.ubifs 
+
+DECIMAL       HEXADECIMAL     DESCRIPTION
+--------------------------------------------------------------------------------
+1084          0x43C           Certificate in DER format (x509 v3), header length: 4, sequence length: 1050
+2138          0x85A           Certificate in DER format (x509 v3), header length: 4, sequence length: 1157
+3998          0xF9E           Certificate in DER format (x509 v3), header length: 4, sequence length: 950
+4952          0x1358          Certificate in DER format (x509 v3), header length: 4, sequence length: 1154
+8759          0x2237          Certificate in DER format (x509 v3), header length: 4, sequence length: 1155
+10379         0x288B          Certificate in DER format (x509 v3), header length: 4, sequence length: 1152
+11535         0x2D0F          Certificate in DER format (x509 v3), header length: 4, sequence length: 1157
+12696         0x3198          Certificate in DER format (x509 v3), header length: 4, sequence length: 1154
+270369        0x42021         Certificate in DER format (x509 v3), header length: 4, sequence length: 1284
+302724        0x49E84         CRC32 polynomial table, little endian
+303748        0x4A284         CRC32 polynomial table, little endian
+309310        0x4B83E         LZO compressed data
+421972        0x67054         uImage header, header size: 64 bytes, header CRC: 0xE0852D26, created: 2020-06-18 05:05:27, image size: 1873064 bytes, Data Address: 0x80E08000, Entry Point: 0x80E08000, data CRC: 0xB1BB3446, OS: Linux, CPU: ARM, image type: OS Kernel Image, compression type: none, image name: "Linux-3.10.53-HULK2"
+422036        0x67094         Linux kernel ARM boot executable zImage (little-endian)
+424416        0x679E0         device tree image (dtb)
+440376        0x6B838         LZMA compressed data, properties: 0x5D, dictionary size: 67108864 bytes, uncompressed size: -1 bytes
+2264460       0x228D8C        device tree image (dtb)
+2267436       0x22992C        device tree image (dtb)
+2270140       0x22A3BC        device tree image (dtb)
+2271988       0x22AAF4        device tree image (dtb)
+2274772       0x22B5D4        device tree image (dtb)
+2277572       0x22C0C4        device tree image (dtb)
+2280456       0x22CC08        device tree image (dtb)
+2283364       0x22D764        device tree image (dtb)
+2286356       0x22E314        device tree image (dtb)
+2289292       0x22EE8C        device tree image (dtb)
+2292336       0x22FA70        device tree image (dtb)
+2297940       0x231054        uImage header, header size: 64 bytes, header CRC: 0xB7DBD5B9, created: 2020-06-18 05:05:27, image size: 35879949 bytes, Data Address: 0x0, Entry Point: 0x0, data CRC: 0x1101ECF2, OS: Linux, CPU: ARM, image type: RAMDisk Image, compression type: none, image name: "squashfs"
+2298004       0x231094        Squashfs filesystem, little endian, version 4.0, compression:lzma, size: 35879949 bytes, 6131 inodes, blocksize: 131072 bytes, created: 2020-06-18 05:25:28
+38178900      0x2469054       Squashfs filesystem, little endian, version 4.0, compression:lzma, size: 162 bytes, 1 inodes, blocksize: 131072 bytes, created: 2020-06-18 05:23:46
+```
+# file_system.ubifs
+Using `ubidump` I was able to see what's inside. It seems like it contains some certificates for connecting to main OLT (I'am not pretty sure about that!!) and a little bit of configuration for some sort of package, installed inside the main part of the Huawei's OS.
+
+# LZMA compression
+LZMA is strange thing, it has many algorithms of compression that can be used. The thing here, if you read Riverloopsecurity's post is that some valid data may be contained in A or B image. We do not know where it is and need to find out by pure bruteforce.
 
 # To Do
-1. Have `PICkit 3`
-2. FS Decryption
+1. Write script for image bruteforce
+2. Try again to mount whole ubilayer_v5 inside linux MTD
